@@ -1,54 +1,99 @@
-/*
- This code will blink an LED attached to pin 13 on and off. 
- It will stay on for 0.25 seconds.
- It will stay off for 1 second.
- */
-#include <Metro.h> //Include Metro library
+//Include Metro library
+#include <Metro.h>
+
+//DEBUG
+#define DEBUG 1
 
 //PINS
-#define LED_BARON_0 13 // Define the led's pin
-#define BUTTON_BARON_0 2
+#define PIN_LED_BLUE_0	8
+#define PIN_LED_BLUE_1	9
+#define PIN_LED_RED_0	10
+#define PIN_LED_RED_1	11
+#define PIN_LED_BARON	12
+#define PIN_LED_DRAGON	13
 
-//Create a variable to hold theled's current state
-int state = HIGH;
+#define PIN_BUTTON_BLUE_0	2
+#define PIN_BUTTON_BLUE_1	3
+#define PIN_BUTTON_RED_0	4
+#define PIN_BUTTON_RED_1	5
+#define PIN_BUTTON_BARON	6
+#define PIN_BUTTON_DRAGON	7
 
 //METRO INSTANCES
-Metro timer_baron_0 = Metro(3000);
-
-//LED STATES
-int led_state_baron_0 = HIGH;
-
-//BUTTON VALUES
-int button_baron_0 = LOW;
+Metro timer_blue_0	= Metro(3000);
+Metro timer_blue_1	= Metro(3000);
+Metro timer_red_0	= Metro(3000);
+Metro timer_red_1	= Metro(3000);
+Metro timer_baron	= Metro(3000);
+Metro timer_dragon	= Metro(3000);
 
 void setup()
 {
+	#if DEBUG
+		//DEBUG
+		Serial.begin(9600);
+	#endif
+
 	//OUTPUTS
-	pinMode(LED_BARON_0,OUTPUT);
+	pinMode(PIN_LED_BLUE_0, OUTPUT);
+	pinMode(PIN_LED_BLUE_1, OUTPUT);
+	pinMode(PIN_LED_RED_0, OUTPUT);
+	pinMode(PIN_LED_RED_1, OUTPUT);
+	pinMode(PIN_LED_BARON, OUTPUT);
+	pinMode(PIN_LED_DRAGON, OUTPUT);
 
 	//INPUTS
-	pinMode(BUTTON_BARON_0, INPUT);
+	pinMode(PIN_BUTTON_BLUE_0, INPUT);
+	pinMode(PIN_BUTTON_BLUE_1, INPUT);
+	pinMode(PIN_BUTTON_RED_0, INPUT);
+	pinMode(PIN_BUTTON_RED_1, INPUT);
+	pinMode(PIN_BUTTON_BARON, INPUT);
+	pinMode(PIN_BUTTON_DRAGON, INPUT);
 
 	//INITIAL STATES 
-	digitalWrite(LED_BARON_0, led_state_baron_0);
+	digitalWrite(PIN_LED_BLUE_0, HIGH);
+	digitalWrite(PIN_LED_BLUE_1, HIGH);
+	digitalWrite(PIN_LED_RED_0, HIGH);
+	digitalWrite(PIN_LED_RED_1, HIGH);
+	digitalWrite(PIN_LED_BARON, HIGH);
+	digitalWrite(PIN_LED_DRAGON, HIGH);
 }
 
 void loop()
 {
-	if( led_state_baron_0 == LOW )
-	{
-		//CHECK OWN BARON
-		if (timer_baron_0.check() == 1) { // check if the metro has passed its interval
-		led_state_baron_0 = HIGH;
-		digitalWrite(LED_BARON_0, led_state_baron_0);
-	}
-  }
-  else if( digitalRead(BUTTON_BARON_0) )
-  {
-	led_state_baron_0 = LOW;
-	digitalWrite(LED_BARON_0, led_state_baron_0);
-	timer_baron_0.reset();
-  }
+	checkJungle(PIN_BUTTON_BLUE_0, PIN_LED_BLUE_0, timer_blue_0);
+	//checkJungle(PIN_BUTTON_BLUE_1, PIN_LED_BLUE_1, timer_blue_1);
+	//checkJungle(PIN_BUTTON_RED_0, PIN_LED_RED_0, timer_red_0);
+	//checkJungle(PIN_BUTTON_RED_1, PIN_LED_RED_1, timer_red_1);
+	//checkJungle(PIN_BUTTON_BARON, PIN_LED_BARON, timer_baron);
+	//checkJungle(PIN_BUTTON_DRAGON, PIN_LED_DRAGON, timer_dragon);
+}
 
-  
+void checkJungle(int pin_button, int pin_led, Metro timer)
+{
+	
+	#if DEBUG
+		Serial.write("pin_button: ");
+		Serial.print(pin_button);
+		Serial.write(" pin_led: ");
+		Serial.print(pin_led);
+		Serial.write(" digitalRead(pin_led): ");
+		Serial.print(digitalRead(pin_led));
+		Serial.write(" digitalRead(pin_button): ");
+		Serial.println(digitalRead(pin_button));
+	#endif
+	
+	if( !digitalRead(pin_led) )
+	{
+		if(timer.check() == 1)
+		{
+			Serial.write("CHECK!");
+			digitalWrite(pin_led, HIGH);
+		}
+	}
+	else if( digitalRead(pin_button) )
+	{
+		timer.reset();
+		digitalWrite(pin_led, LOW);
+	}
 }
