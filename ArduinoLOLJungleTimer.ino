@@ -2,7 +2,7 @@
 #include <Metro.h>
 
 //DEBUG
-#define DEBUG 1
+#define DEBUG 0
 
 //PINS
 #define PIN_LED_BLUE_0	8
@@ -62,14 +62,14 @@ void setup()
 void loop()
 {
 	checkJungle(PIN_BUTTON_BLUE_0, PIN_LED_BLUE_0, timer_blue_0);
-	//checkJungle(PIN_BUTTON_BLUE_1, PIN_LED_BLUE_1, timer_blue_1);
-	//checkJungle(PIN_BUTTON_RED_0, PIN_LED_RED_0, timer_red_0);
-	//checkJungle(PIN_BUTTON_RED_1, PIN_LED_RED_1, timer_red_1);
-	//checkJungle(PIN_BUTTON_BARON, PIN_LED_BARON, timer_baron);
-	//checkJungle(PIN_BUTTON_DRAGON, PIN_LED_DRAGON, timer_dragon);
+	checkJungle(PIN_BUTTON_BLUE_1, PIN_LED_BLUE_1, timer_blue_1);
+	checkJungle(PIN_BUTTON_RED_0, PIN_LED_RED_0, timer_red_0);
+	checkJungle(PIN_BUTTON_RED_1, PIN_LED_RED_1, timer_red_1);
+	checkJungle(PIN_BUTTON_BARON, PIN_LED_BARON, timer_baron);
+	checkJungle(PIN_BUTTON_DRAGON, PIN_LED_DRAGON, timer_dragon);
 }
 
-void checkJungle(int pin_button, int pin_led, Metro timer)
+void checkJungle(int pin_button, int pin_led, Metro& timer)
 {
 	
 	#if DEBUG
